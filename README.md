@@ -1,3 +1,3 @@
 # hot-to-go
-Boilerplate Vue 3 + Docker + PostgreSQL with TDD
+Front End Study with Vue 3 + Docker + PostgreSQL with TDD
 
