@@ -7,6 +7,7 @@ defineProps<{
 <template>
   <label :class="{ checked: isChecked }">
     <input type="checkbox" :checked="isChecked" />
+    <!-- The slot is used to display the title of the item inside the label. -->
     <slot></slot>
   </label>
 </template>
