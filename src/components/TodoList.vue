@@ -76,8 +76,8 @@ const initListItems = (): void => {
 }
 
 onMounted(() => {
-  initListItems() // Initialize the list items when the component is mounted
   storageItems.value = getFromStorage() // Get the list from local storage
+  initListItems() // Initialize the list items when the component is mounted
 })
 </script>
 
