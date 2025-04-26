@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import ListItem from './ListItem.vue'
-import { ref, computed } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import type { Ref } from 'vue'
 
 type Item = {
@@ -28,11 +28,12 @@ const updateItem = (item: Item): void => {
   const updateItem = findItemInList(item)
   if (updateItem) {
     toggleItemChecked(updateItem)
+    setToStorage(storageItems.value) // Store the updated list in local storage
   }
 }
 
 const findItemInList = (item: Item): Item | undefined => {
-  return listItems.value.find((itemInList: Item) => itemInList.title === item.title)
+  return storageItems.value.find((itemInList: Item) => itemInList.title === item.title)
 }
 
 const toggleItemChecked = (item: Item): void => {
@@ -43,7 +44,7 @@ const toggleItemChecked = (item: Item): void => {
 
 // The sortedList computed property sorts the listItems array based on the checked property.
 const sortedList = computed(() =>
-  [...listItems.value].sort((a, b) => (a.checked ? 1 : 0) - (b.checked ? 1 : 0)),
+  [...storageItems.value].sort((a, b) => (a.checked ? 1 : 0) - (b.checked ? 1 : 0)),
 )
 
 // Preserving changes to the list
@@ -57,6 +58,31 @@ const getFromStorage = (): Item[] | [] => {
     return JSON.parse(stored)
   }
   return []
+}
+//Var declaration:  Reactive Type = Creates empty reactive reference
+const storageItems: Ref<Item[]> = ref([])
+
+const initListItems = () => {
+  if (storageItems.value?.length === 0) {
+    const listItems = [
+      { title: 'Make a todo list app', checked: true },
+      { title: 'Predict the Weather', checked: false },
+      { title: 'Play some tunes', checked: false },
+      { title: 'Pump some iron', checked: false },
+      { title: 'Track my expenses', checked: false },
+      { title: 'Organize a game night', checked: false },
+      { title: 'Learn a new language', checked: false },
+      { title: 'Publish my work', checked: false },
+    ]
+
+    setToStorage(listItems) // Store the initial list in local storage
+    storageItems.value = listItems // Assign the initial list to the storageItems reference, that is reactive
+  }
+
+  onMounted(() => {
+    initListItems() // Initialize the list items when the component is mounted
+    storageItems.value = getFromStorage() // Get the list from local storage
+  })
 }
 </script>
 
